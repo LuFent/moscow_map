@@ -5,10 +5,13 @@ from django.utils.safestring import mark_safe
 
 
 class ImagesInline(SortableInlineAdminMixin, admin.TabularInline):
+    """
+        Инлайн для модели Place админки
+    """
     model = Image
     extra = 1
     fields = ('image', 'preview', 'number')
-    readonly_fields = ("preview",)
+    readonly_fields = ('preview',)
 
 
 @admin.register(Place)

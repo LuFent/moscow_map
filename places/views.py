@@ -8,18 +8,23 @@ from django.urls import reverse
 
 
 def serialize_place(place):
+    """
+        Функция, для создания словаря для шаблона
+        :param place: Объект модели Place
+        :return: Словарь
+    """
     serialized_place = \
      {
-        "type": "Feature",
+        'type': 'Feature',
         "geometry": {
-                    "type": "Point",
-                    "coordinates": [place.lat, place.lng]
+                    'type': 'Point',
+                    'coordinates': [place.lat, place.lng]
                     },
 
-        "properties": {
-                    "title": place.title,
-                    "placeId": place.place_id,
-                    "detailsUrl": reverse("place_json", kwargs={'place_id': place.place_id})
+        'properties': {
+                    'title': place.title,
+                    'placeId': place.place_id,
+                    'detailsUrl': reverse('place_json', kwargs={'place_id': place.place_id})
                      }
      }
 
@@ -27,14 +32,17 @@ def serialize_place(place):
 
 
 def main_page(request):
+    """
+        Вьюха для главной страницы
+    """
     template = loader.get_template('index.html')
 
     places = Place.objects.all()
 
     places_geojson = {
-        "type": "FeatureCollection",
+        'type': 'FeatureCollection',
 
-        "features": [serialize_place(place) for place in places]
+        'features': [serialize_place(place) for place in places]
     }
 
     context = {
@@ -45,15 +53,20 @@ def main_page(request):
 
 
 def place_json(request, place_id):
+    """
+            API для получения словаря для detailsUrl
+            :param place_id: ID места
+            :return: Словарь detailsUrl
+    """
     place = get_object_or_404(Place, place_id=place_id)
     place_data = {
-                    "title": place.title,
-                    "imgs": [str(image.image.url) for image in place.imgs.all()],
-                    "description_short": place.short_description,
-                    "description_long": place.long_description,
-                    "coordinates": {
-                    "lng": place.lng,
-                    "lat": place.lat
+                    'title': place.title,
+                    'imgs': [str(image.image.url) for image in place.imgs.all()],
+                    'description_short': place.short_description,
+                    'description_long': place.long_description,
+                    'coordinates': {
+                    'lng': place.lng,
+                    'lat': place.lat
                     }
                 }
 

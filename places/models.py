@@ -2,8 +2,16 @@ from django.db import models
 from django.utils.html import format_html
 from tinymce.models import HTMLField
 
+"""
+:Place: Модель места на карте
+:Image: Модель картинки места 
+"""
+
 
 class Place(models.Model):
+    """
+        Модель места на карте
+    """
     title = models.CharField('Название места', max_length=70, blank=True)
     short_description = models.CharField('Краткое описание места', max_length=350, blank=True)
     long_description = HTMLField('Полное описание места', blank=True)
@@ -16,6 +24,9 @@ class Place(models.Model):
 
 
 class Image(models.Model):
+    """
+        Модель картинки для Place
+    """
     image = models.ImageField('Изображение места', null=True, blank=True)
     place = models.ForeignKey(Place,
                               on_delete=models.CASCADE,
@@ -33,4 +44,4 @@ class Image(models.Model):
         return format_html(f'<img src="{full_url}", width=200, height=200>')
 
     def __str__(self):
-        return f"{self.number}  img of  {self.place.title}"
+        return f'{self.number}  img of  {self.place.title}'

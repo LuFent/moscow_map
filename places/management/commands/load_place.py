@@ -5,10 +5,8 @@ import requests
 from django.core.files.base import ContentFile
 
 
-
-
-
 class Command(BaseCommand):
+
     help = 'Adding place to DB'
 
     def add_arguments(self, parser):
@@ -45,8 +43,6 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.ERROR('Cannot add this images'))
         else:
             self.stdout.write(self.style.ERROR('Cannot register this place'))
-
-
 
 
     def handle(self, *args, **kwargs):
