@@ -18,7 +18,10 @@ python manage.py migrate
 
 * Создайте файл .env в каталоге where_to_go со следующим таким содержанием:
 ```
-export SECRET_KEY=<ВАШ SECRET_KEY>
+export SECRET_KEY=<Ваш SECRET_KEY>
+export DEBUG=<Ваша настройка дебага: True/False>
+export ALLOWED_HOSTS=<Ваши разрешенные хосты, через запятую: my.host1,myhost2>
+export COLLECTED_STATIC=<Папка для собранной статики>
 ```
 
 * Запустите веб-сервер командой
@@ -37,3 +40,28 @@ python manage.py runserver
 * Выбрать место которое вы хотите изменить или нажать на кнопку "ADD PLACE"
 * Заполнить необходимые поля
 * Нажать SAVE
+
+ИЛИ
+
+Запустить команду
+
+```
+python manage.py load_place <Ссылка на json файл>
+```
+
+
+    "title": "<Название места>",
+
+    "imgs": [
+        "<Ссылка на 1-ую картинку>",
+        "<Ссылка на 2ую картинку>",
+        <...>
+
+    ],
+
+    "description_short": ,
+    "description_long": ,
+    "coordinates": {
+        "lng": "37.541557",
+        "lat": "55.74694299999997"
+    }

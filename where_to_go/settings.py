@@ -18,8 +18,8 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=True)
 
-ALLOWED_HOSTS =  ['localhost', '127.0.0.1', 'lufent.pythonanywhere.com']
-
+#ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'lufent.pythonanywhere.com']
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 # Application definition
 
@@ -111,11 +111,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-#STATICFILES_DIRS = [
-#    os.path.join(BASE_DIR, "static"),
-#]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, env('COLLECTED_STATIC')),
 
-
+]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -1,10 +1,10 @@
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 import os
-from .models import Place, Image
-import pprint
+from .models import Place
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from django.shortcuts import render
 
 
 def serialize_place(place):
@@ -18,7 +18,7 @@ def serialize_place(place):
         'type': 'Feature',
         "geometry": {
                     'type': 'Point',
-                    'coordinates': [place.lat, place.lng]
+                    'coordinates': [place.lng, place.lat,]
                     },
 
         'properties': {
@@ -35,21 +35,18 @@ def main_page(request):
     """
         Вьюха для главной страницы
     """
-    template = loader.get_template('index.html')
-
     places = Place.objects.all()
 
     places_geojson = {
         'type': 'FeatureCollection',
-
         'features': [serialize_place(place) for place in places]
     }
 
     context = {
         'all_places': places_geojson,
     }
-    rendered_page = template.render(context, request)
-    return HttpResponse(rendered_page)
+
+    return render(request, 'index.html', context)
 
 
 def place_json(request, place_id):
@@ -58,15 +55,15 @@ def place_json(request, place_id):
             :param place_id: ID места
             :return: Словарь detailsUrl
     """
-    place = get_object_or_404(Place, place_id=place_id)
+    required_place = get_object_or_404(Place, place_id=place_id)
     place_data = {
-                    'title': place.title,
-                    'imgs': [str(image.image.url) for image in place.imgs.all()],
-                    'description_short': place.short_description,
-                    'description_long': place.long_description,
+                    'title': required_place.title,
+                    'imgs': [str(image.image.url) for image in required_place.imgs.all()],
+                    'description_short': required_place.short_description,
+                    'description_long': required_place.long_description,
                     'coordinates': {
-                    'lng': place.lng,
-                    'lat': place.lat
+                    'lng': required_place.lng,
+                    'lat': required_place.lat
                     }
                 }
 

@@ -14,36 +14,40 @@ class Command(BaseCommand):
 
     def add_place(self, link_to_json):
         response = requests.get(link_to_json.strip())
-        if response.ok:
-            place_data = response.json()
-            place, creation_status = Place.objects.get_or_create(
-                title=place_data['title'],
-                short_description=place_data['description_short'],
-                long_description=place_data['description_long'],
-                lat=place_data['coordinates']["lng"],
-                lng=place_data['coordinates']["lat"]
-            )
-            place.place_id = str(place.id)
-            place.save()
 
-            if creation_status:
-                for num, img_link in enumerate(place_data['imgs']):
-                    image_name = img_link.split('/')[-1]
-                    image_file = ContentFile(requests.get(img_link).content)
-
-                    image_obj, creation_status = Image.objects.get_or_create(
-                        place=place,
-                        number=num
-                    )
-                    image_obj.image.save(image_name, image_file, save=True)
-
-                self.stdout.write(self.style.SUCCESS('Place added'))
-
-            else:
-                self.stdout.write(self.style.ERROR('Cannot add this images'))
-        else:
+        try:
+            response.raise_for_status()
+        except requests.exceptions.ConnectionError:
             self.stdout.write(self.style.ERROR('Cannot register this place'))
 
+        new_place_fields = response.json()
+
+        new_place, creation_status = Place.objects.update_or_create(
+            title=new_place_fields['title'],
+            lng=new_place_fields['coordinates']["lng"],
+            lat=new_place_fields['coordinates']["lat"],
+            defaults={'short_description': new_place_fields['description_short'],
+                      'long_description': new_place_fields['description_long'],
+                      }
+        )
+        new_place.place_id = str(new_place.id)
+        new_place.save()
+
+        if creation_status:
+            for num, img_link in enumerate(new_place_fields['imgs']):
+                image_name = img_link.split('/')[-1]
+                image_file = ContentFile(requests.get(img_link).content)
+
+                image_obj, creation_status = Image.objects.get_or_create(
+                    place=new_place,
+                    number=num
+                )
+                image_obj.image.save(image_name, image_file, save=True)
+
+            self.stdout.write(self.style.SUCCESS('Place added'))
+
+        else:
+            self.stdout.write(self.style.ERROR('This place already exists'))
 
     def handle(self, *args, **kwargs):
         self.add_place(kwargs['place_json'])
