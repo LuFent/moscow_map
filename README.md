@@ -49,19 +49,21 @@ python manage.py runserver
 python manage.py load_place <Ссылка на json файл>
 ```
 
+У Json файла должна быть следующая структура:
 
+```
+{
     "title": "<Название места>",
-
     "imgs": [
         "<Ссылка на 1-ую картинку>",
-        "<Ссылка на 2ую картинку>",
+        "<Ссылка на 2-ую картинку>",
         <...>
-
     ],
-
-    "description_short": ,
-    "description_long": ,
+    "description_short": "<Краткое описание места>",
+    "description_long": "<Полное описание места>",
     "coordinates": {
-        "lng": "37.541557",
-        "lat": "55.74694299999997"
+        "lng": "<Долгота>",
+        "lat": "<Широта>"
     }
+}
+```
