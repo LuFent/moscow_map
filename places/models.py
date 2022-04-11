@@ -15,8 +15,8 @@ class Place(models.Model):
     title = models.CharField('Название места', max_length=70)
     short_description = models.TextField('Краткое описание места', blank=True)
     long_description = HTMLField('Полное описание места', blank=True)
-    lat = models.FloatField('Широта', default=55.753989)
-    lng = models.FloatField('Долгота', default=37.623191)
+    lat = models.FloatField('Широта')
+    lng = models.FloatField('Долгота')
     place_id = models.CharField('ID места', max_length=25, unique=True)
 
     def __str__(self):
@@ -31,8 +31,7 @@ class Image(models.Model):
     place = models.ForeignKey(Place,
                               on_delete=models.CASCADE,
                               verbose_name='К какому месту относится',
-                              related_name='imgs',
-                              default=None)
+                              related_name='imgs')
 
     number = models.IntegerField('Номер картинки', default=0)
 
