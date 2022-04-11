@@ -67,3 +67,5 @@ python manage.py load_place <Ссылка на json файл>
     }
 }
 ```
+----------------
+[Пример рабочего сайта](http://lufent.pythonanywhere.com/)
