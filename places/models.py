@@ -12,12 +12,12 @@ class Place(models.Model):
     """
         Модель места на карте
     """
-    title = models.CharField('Название места', max_length=70, blank=False)
+    title = models.CharField('Название места', max_length=70)
     short_description = models.TextField('Краткое описание места', blank=True)
     long_description = HTMLField('Полное описание места', blank=True)
-    lat = models.FloatField('Широта', null=True, blank=False)
-    lng = models.FloatField('Долгота', null=True, blank=False)
-    place_id = models.CharField('ID места', max_length=25, blank=False, unique=True)
+    lat = models.FloatField('Широта', default=55.753989)
+    lng = models.FloatField('Долгота', default=37.623191)
+    place_id = models.CharField('ID места', max_length=25, unique=True)
 
     def __str__(self):
         return self.title
@@ -27,16 +27,15 @@ class Image(models.Model):
     """
         Модель картинки для Place
     """
-    image = models.ImageField('Изображение места', null=True, blank=False)
+    image = models.ImageField('Изображение места', null=True)
     place = models.ForeignKey(Place,
                               on_delete=models.CASCADE,
                               verbose_name='К какому месту относится',
                               related_name='imgs',
                               default=None,
-                              null=True,
-                              blank=False)
+                              null=True)
 
-    number = models.IntegerField('Номер картинки', blank=False, default=0)
+    number = models.IntegerField('Номер картинки', default=0)
 
     class Meta(object):
         ordering = ['number']
