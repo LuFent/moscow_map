@@ -33,21 +33,21 @@ class Command(BaseCommand):
         new_place.place_id = str(new_place.id)
         new_place.save()
 
-        if creation_status:
-            for num, img_link in enumerate(new_place_fields['imgs']):
-                image_name = img_link.split('/')[-1]
-                image_file = ContentFile(requests.get(img_link).content)
-
-                image_obj, creation_status = Image.objects.get_or_create(
-                    place=new_place,
-                    number=num
-                )
-                image_obj.image.save(image_name, image_file, save=True)
-
-            self.stdout.write(self.style.SUCCESS('Place added'))
-
-        else:
+        if not creation_status:
             self.stdout.write(self.style.ERROR('This place already exists'))
+            return
+
+        for num, img_link in enumerate(new_place_fields['imgs']):
+            image_name = img_link.split('/')[-1]
+            image_file = ContentFile(requests.get(img_link).content)
+
+            image_obj, creation_status = Image.objects.get_or_create(
+                place=new_place,
+                number=num
+            )
+            image_obj.image.save(image_name, image_file, save=True)
+
+        self.stdout.write(self.style.SUCCESS('Place added'))
 
     def handle(self, *args, **kwargs):
         self.add_place(kwargs['place_json'])
