@@ -20,3 +20,6 @@ class PlaceAdmin(admin.ModelAdmin):
     inlines = [ImagesInline]
 
 
+admin.site.register(Image)
+
+

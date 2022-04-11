@@ -27,13 +27,12 @@ class Image(models.Model):
     """
         Модель картинки для Place
     """
-    image = models.ImageField('Изображение места', null=True)
+    image = models.ImageField('Изображение места', default=None)
     place = models.ForeignKey(Place,
                               on_delete=models.CASCADE,
                               verbose_name='К какому месту относится',
                               related_name='imgs',
-                              default=None,
-                              null=True)
+                              default=None)
 
     number = models.IntegerField('Номер картинки', default=0)
 
